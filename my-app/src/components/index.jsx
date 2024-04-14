@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from 'react-icons/bs'
 
 
 
-
-export default function ImageSlider({ url, limit }) {
+export default function ImageSlider({ url, limit = 5, page = 1 }) {
 
     const [images, setImages] = useState([]);
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -13,7 +13,7 @@ export default function ImageSlider({ url, limit }) {
     async function fetchImages(getUrl) {
         try {
             setLoading(true)
-            const response = await fetch(`${getUrl}?page=1&limit=${limit}`);
+            const response = await fetch(`${getUrl}?page=${page}&limit=${limit}`);
             const data = await response.json();
 
             if (data) {
@@ -34,13 +34,39 @@ export default function ImageSlider({ url, limit }) {
         if (url !== '') fetchImages(url)
     }, [url])
 
-    if(loading) {
+    console.log(images)
+
+    if (loading) {
         return <div>Loading data! Please wait</div>
     }
 
-    if(errorMsg !== null) {
+    if (errorMsg !== null) {
         return <div>Error occurred! {errorMsg}</div>
     }
 
-    return <div className="container"></div>
+    return <div className="container">
+        <BsArrowLeftCircleFill className="arrow arrow-left" />
+        {
+            images && images.length ?
+                images.map(imageItem => (
+                    <img
+                        key={imageItem.id}
+                        alt={imageItem.download_url}
+                        src={imageItem.download_url}
+                        className="current-image"
+                    />
+                )) : null}
+        <BsArrowRightCircleFill className="arrow arrow-right" />
+        <span className="circle-indicators">
+            {
+                images && images.length ?
+                    images.map((_, index) => <button
+                        key={index}
+                        className="current-indicator"
+                    ></button>)
+                    : null
+            }
+
+        </span>
+    </div>
 }
