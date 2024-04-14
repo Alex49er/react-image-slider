@@ -41,7 +41,7 @@ export default function ImageSlider({ url, limit = 5, page = 1 }) {
         if (url !== '') fetchImages(url)
     }, [url])
 
-    console.log(images)
+
 
     if (loading) {
         return <div>Loading data! Please wait</div>
@@ -64,7 +64,7 @@ export default function ImageSlider({ url, limit = 5, page = 1 }) {
                     />
                 )) : null}
         <BsArrowRightCircleFill onClick={handleNext} className="arrow arrow-right" />
-        <span className="current-indicator">
+        <span className="circle-indicator">
             {
                 images && images.length ?
                     images.map((_, index) => <button
