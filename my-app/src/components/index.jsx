@@ -13,7 +13,7 @@ export default function ImageSlider({ url, limit }) {
     async function fetchImages(getUrl) {
         try {
             setLoading(true)
-            const response = await fetch(getUrl);
+            const response = await fetch(`${getUrl}?page=1&limit=${limit}`);
             const data = await response.json();
 
             if (data) {
@@ -33,6 +33,14 @@ export default function ImageSlider({ url, limit }) {
     useEffect(() => {
         if (url !== '') fetchImages(url)
     }, [url])
+
+    if(loading) {
+        return <div>Loading data! Please wait</div>
+    }
+
+    if(errorMsg !== null) {
+        return <div>Error occurred! {errorMsg}</div>
+    }
 
     return <div className="container"></div>
 }
